@@ -1,5 +1,6 @@
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">google.load("jquery", "1.3.2");</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-chtml.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="./resources/style.css" media="screen" />
 
@@ -52,7 +53,16 @@
             Pengyang Ling*<sup>1</sup>
         </div>
         <div class="author">
-            Lin Chen*<sup>1,2</sup>
+            <a href="https://lin-chen.site">Lin Chen</a>*<sup>1,2</sup>
+        </div>
+        <div class="author">
+            <a href="https://panzhang0212.github.io/">Pan Zhang</a><sup>2</sup>
+        </div>
+        <div class="author">
+            Huaian Chen<sup>1&#9993</sup>
+        </div>
+        <div class="author">
+            Yi Jin<sup>1&#9993</sup>
         </div>
 
         <br><br>
@@ -62,8 +72,8 @@
 
         <br><br>
 
-        <div class="links">[Paper]</div>
-        <div class="links">[Code] (Soon)</div>
+        <div class="links"><a href="https://arxiv.org/abs/2307.04684">[Paper]</a></div>
+        <div class="links"><a href="https://github.com/LPengYang/FreeDrag">[Code]</a></div>
 
         <br><br>
 
@@ -123,41 +133,48 @@
 
         <h1>Abstract</h1>
         <p style="width: 80%;text-align: justify">
-            Precise and controllable image editing is a challenging task that has attracted significant attention.
-            Recently, DragGAN enables an interactive point-based image editing framework and achieves impressive
-            editing results with pixel-level precision.
-            However, since this method is based on generative adversarial networks (GAN),
-            its generality is upper-bounded by the capacity of the pre-trained GAN models.
-            In this work, we extend such an editing framework to diffusion models and
-            propose DragDiffusion. By leveraging large-scale pretrained diffusion models,
-            we greatly improve the applicability of interactive point-based editing in real world scenarios.
-            While most existing diffusion-based image editing methods work on text embeddings,
-            DragDiffusion optimizes the diffusion latent to achieve precise spatial control.
-            Although diffusion models generate images in an iterative manner,
-            we empirically show that optimizing diffusion latent at one single step suffices to
-            generate coherent results, enabling DragDiffusion to complete high-quality editing efficiently.
-            Extensive experiments across a wide range of challenging cases
-            (e.g., multi-objects, diverse object categories, various styles, etc.)
-            demonstrate the versatility and generality of DragDiffusion.
+            To serve the intricate and varied demands of image editing, precise and flexible manipulation of image
+            content is indispensable. Recently, DragGAN has achieved impressive editing results through point-based
+            manipulation.
+            However, we have observed that DragGAN struggles with miss tracking, where DragGAN encounters difficulty in
+            effectively tracking the desired handle points, and ambiguous tracking, where the tracked points are
+            situated within
+            other regions that bear resemblance to the handle points. To deal with the above issues, we propose
+            <b>FreeDrag</b>, which
+            adopts a feature-oriented approach to free the burden on point tracking within the point-oriented
+            methodology of
+            DragGAN. The <b>FreeDrag</b> incorporates adaptive template features, line search, and fuzzy localization
+            techniques to
+            perform stable and efficient point-based image editing. Extensive experiments demonstrate that our method is
+            superior to the DragGAN and enables stable point-based editing in challenging scenarios with similar
+            structures, fine
+            details, or under multi-point targets.
         </p>
 
         <br><br>
         <hr>
 
-        <h1>Method Overview</h1>
-        <img style="width: 80%;" src="./drag_diffusion_resources/method_v3.jpg" alt="Method overview figure" />
-        <br>
+        <h1>Method</h1>
+        <img style="width: 80%;" src="./resources/overview.png" alt="Method overview figure" />
+        <br><br>
         <p style="width: 80%;text-align: justify">
-            Overview of DragDiffusion.
-            As shown in part (A), we first finetune a LoRA on parameters of the UNet to reconstruct
-            the user input image before editing.
-            Next, part (B) illustrates the detailed editing process.
-            Specifically, we first apply a DDIM inversion on the input image
-            and obtain the latent at a certain time step.
-            Then, based on the user editing instructions (i.e., handle points, target points, and mask),
-            we optimize the inverted latent to supervise handle points to move to target points.
-            Finally, DDIM denoising is applied on the optimized latent to obtain
-            the final editing result.
+            <b>The overview of the proposed FreeDrag.</b>
+            The customized movement scheme provides deliberate control of the difficulty of
+            each motion and the adaptive updating <span>\(F_{ema}\)</span> enables a smooth feature migration during the
+            total movement.
+            They together facilitate a stable point movement for reliable point-based image editing.
+        </p>
+        <br><br>
+        <img style="width: 40%;" src="./resources/detail.png" alt="Method detail figure" />
+        <br><br>
+        <p style="width: 80%;text-align: justify">
+            <b>The comparison between point-oriented DragGAN and feature-oriented FreeDrag.</b> The
+            <span>\(p_i^{k}\)</span> denotes the location of the
+            handle point at the beginning of <span>\(k\)</span>-th motion. The most difference between DragGAN and
+            FreeDrag is that DragGAN demands
+            the precise location of <span>\(p_i^{k}\)</span> while FreeDrag potentially encourages
+            <span>\(p_i^{k}\)</span> to move to customized <span>\(t_i^{k}\)</span> by
+            forcing <span>\(F_r(t_i^{k})\)</span> to approach <span>\(F_{ema}^{k-1}\)</span>.
         </p>
 
         <br><br>
@@ -182,19 +199,18 @@
 
         <h1>Paper</h1>
         <div class="paper-thumbnail">
-            <a href="https://arxiv.org/abs/2306.14435">
-                <img class="layered-paper-big" width="100%" src="./drag_diffusion_resources/paper.jpg"
-                    alt="Paper thumbnail" />
+            <a href="https://arxiv.org/abs/2307.04684">
+                <img class="layered-paper-big" width="100%" src="./resources/paper.png" alt="Paper thumbnail" />
             </a>
         </div>
         <div class="paper-info">
-            <h3>DragDiffusion: Harnessing Diffusion Models for Interactive Point-based Image Editing</h3>
-            <p>Yujun Shi, Chuhui Xue, Jiachun Pan, Wenqing Zhang, Vincent Y. F. Tan, Song Bai</p>
+            <h3>FreeDrag: Point Tracking is Not You Need for Interactive Point-based Image Editing</h3>
+            <p>Pengyang Ling and Lin Chen and Pan Zhang and Huaian Chen and Yi Jin</p>
             <p>arXiv, 2023.</p>
-            <pre><code>@InProceedings{shi2023dragdiffusion,
-            title = {DragDiffusion: Harnessing Diffusion Models for Interactive Point-based Image Editing},
-            author = {Yujun Shi, Chuhui Xue, Jiachun Pan, Wenqing Zhang, Vincent Y. F. Tan, Song Bai},
-            booktitle = {arXiv preprint arXiv:2306.14435},
+            <pre><code>@InProceedings{ling2023freedrag,
+            title = {FreeDrag: Point Tracking is Not You Need for Interactive Point-based Image Editing},
+            author = {Pengyang Ling and Lin Chen and Pan Zhang and Huaian Chen and Yi Jin},
+            booktitle = {arXiv preprint arXiv:2307.04684},
             year = {2023},
         }
         </code></pre>
@@ -208,8 +224,9 @@
             This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a
                 href="http://richzhang.github.io/">Richard Zhang</a> for a <a
                 href="http://richzhang.github.io/colorization/">colorful project</a>, and inherits the modifications
-            made by <a href="https://github.com/jasonyzhang/webpage-template">Jason Zhang</a> and <a
-                href="https://github.com/elliottwu/webpage-template">Elliott Wu</a>.
+            made by <a href="https://github.com/jasonyzhang/webpage-template">Jason Zhang</a>, <a
+                href="https://github.com/elliottwu/webpage-template">Elliott Wu</a>,
+            and <a href="https://github.com/Yujun-Shi/Yujun-Shi.github.io">Yujun Shi</a>.
         </p>
 
         <br><br>
