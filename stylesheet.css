@@ -20,6 +20,8 @@ a:has(> img):focus {
 
 html {
   background-color: #eee;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -226,10 +228,12 @@ td.pub_td1 img.papericon {
   color: #527bbd;
 }
 
-/* Top banner: match reference loose table layout */
+/* Top banner: fluid table so narrow viewports don’t overflow */
 #layout-content > table:first-of-type {
   border: none;
   border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
 }
 
 #layout-content > table:first-of-type td {
@@ -238,4 +242,97 @@ td.pub_td1 img.papericon {
 
 #layout-content > table:first-of-type td.profile-photo-cell {
   padding-top: 3.25rem;
+  width: 190px;
+  max-width: 40%;
+}
+
+#layout-content > table:first-of-type td.intro-text-cell {
+  width: auto;
+  padding-right: 1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#layout-content .profile-photo {
+  width: 170px;
+  max-width: 100%;
+  height: auto;
+}
+
+#layout-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ----- Mobile / narrow viewports ----- */
+@media (max-width: 720px) {
+  body {
+    margin: 8px auto;
+    padding: 10px 16px 24px;
+  }
+
+  #layout-content {
+    padding: 0 0.35em;
+  }
+
+  #layout-content > table:first-of-type tbody,
+  #layout-content > table:first-of-type tr,
+  #layout-content > table:first-of-type td {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #layout-content > table:first-of-type td.profile-photo-cell {
+    padding-top: 1rem;
+    text-align: center;
+  }
+
+  #layout-content > table:first-of-type td.intro-text-cell {
+    padding-right: 0;
+  }
+
+  div#toptitle h1 {
+    font-size: 1.35em;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 1.35em;
+  }
+
+  h2 {
+    font-size: 1.12em;
+  }
+
+  h3 {
+    font-size: 1.05em;
+  }
+
+  #layout-content ul {
+    padding-left: 1.1em;
+  }
+
+  table.pub_table {
+    border-spacing: 8px 6px;
+    display: block;
+    width: 100%;
+  }
+
+  table.pub_table tbody,
+  table.pub_table tr,
+  table.pub_table td {
+    display: block;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  td.pub_td2 {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  #layout-content a {
+    overflow-wrap: anywhere;
+  }
 }
